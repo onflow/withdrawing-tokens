@@ -52,6 +52,7 @@ recipe-name/
 - `const recipe`: defines a unique identifier (slug) for the recipe
 - `title`: indicates the title of the recipe
 - `featuredText`(optional): a subheading for the recipe title
+- `coverUrl` (optional): path to a featured cover image for the recipe
 - `createdAt`: date on which recipe was added to the Cadence Cookbook
 - `author`: contributor of the recipe
 - `playgroundLink`: a link to Flow Playground containing the deployed recipe code
@@ -62,6 +63,8 @@ recipe-name/
 - `transactionExplanation`: path to location of transaction code explanation
 - `testsPath`: path to location of Cadence test cases code example
 - `testsExplanationPath`: path to location of test cases code explanation
+- `filters`: the filters object is used to perform filtering on recipes in the cookbook
+    - `difficulty`: the difficulty filter supports one of ['beginner', 'intermediate', 'advanced']
 
 
 ```
