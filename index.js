@@ -22,4 +22,7 @@ export const withdrawingTokens = {
   smartContractExplanation: smartContractExplanationPath,
   transactionCode: transactionPath,
   transactionExplanation: transactionExplanationPath,
+  filters: {
+    difficulty: "beginner"
+  }
 };
