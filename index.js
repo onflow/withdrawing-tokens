@@ -23,6 +23,6 @@ export const withdrawingTokens = {
   transactionCode: transactionPath,
   transactionExplanation: transactionExplanationPath,
   filters: {
-    difficulty: "beginner"
-  }
+    difficulty: "beginner",
+  },
 };
