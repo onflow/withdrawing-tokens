@@ -1,0 +1,30 @@
+name: Run Cadence Lint
+on: push
+
+jobs:
+  run-cadence-lint:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Install Flow CLI
+        run: |
+          brew update
+          brew install flow-cli
+
+      - name: Initialize Flow
+        run: |
+          if [ ! -f flow.json ]; then
+            echo "Initializing Flow project..."
+            flow init
+          else
+            echo "Flow project already initialized."
+          fi
+
+      - name: Run Cadence Lint
+        run: |
+          echo "Running Cadence linter on all .cdc files in the current repository"
+          flow cadence lint **/*.cdc

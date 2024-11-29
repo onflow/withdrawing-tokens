@@ -1,0 +1,34 @@
+name: Run Cadence Tests
+on: push
+
+jobs:
+  run-cadence-tests:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Install Flow CLI
+        run: |
+          brew update
+          brew install flow-cli
+
+      - name: Initialize Flow
+        run: |
+          if [ ! -f flow.json ]; then
+            echo "Initializing Flow project..."
+            flow init
+          else
+            echo "Flow project already initialized."
+          fi
+
+      - name: Run Cadence Tests
+        run: |
+          if test -f "cadence/tests.cdc"; then
+            echo "Running Cadence tests in the current repository"
+            flow test cadence/tests.cdc
+          else
+            echo "No Cadence tests found. Skipping tests."
+          fi
