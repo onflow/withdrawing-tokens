@@ -1,4 +1,4 @@
-name: Run Cadence Lint
+name: Run Cadence Contract Compilation, Deployment, Transaction Execution, and Lint
 on: push
 
 jobs:
@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: 'true'
-
+          
       - name: Install Flow CLI
         run: |
           brew update
@@ -23,8 +23,29 @@ jobs:
           else
             echo "Flow project already initialized."
           fi
+          flow dependencies install
+
+      - name: Start Flow Emulator
+        run: |
+          echo "Starting Flow emulator in the background..."
+          nohup flow emulator start > emulator.log 2>&1 &
+          sleep 5 # Wait for the emulator to start
+          flow project deploy --network=emulator # Deploy the recipe contracts indicated in flow.json                           
+
+      - name: Run All Transactions
+        run: |
+          echo "Running all transactions in the transactions folder..."
+          for file in ./cadence/transactions/*.cdc; do
+            echo "Running transaction: $file"
+            TRANSACTION_OUTPUT=$(flow transactions send "$file" --signer emulator-account)
+            echo "$TRANSACTION_OUTPUT"
+            if echo "$TRANSACTION_OUTPUT" | grep -q "Transaction Error"; then
+              echo "Transaction Error detected in $file, failing the action..."
+              exit 1
+            fi
+          done
 
       - name: Run Cadence Lint
         run: |
-          echo "Running Cadence linter on all .cdc files in the current repository"
-          flow cadence lint **/*.cdc
+          echo "Running Cadence linter on .cdc files in the current repository"
+          flow cadence lint ./cadence/**/*.cdc
