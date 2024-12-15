@@ -5,16 +5,16 @@ import "ExampleToken"
 // that owns a Vault
 transaction {
 
-    // Temporary Vault object that holds the balance that is being transferred
+    // Temporary Vault object that holds the balance being transferred
     var temporaryVault: @ExampleToken.Vault
 
     prepare(acct: auth(Storage, Capabilities) &Account) {
-        // Withdraw tokens from your vault by borrowing a reference to it
-        // and calling the withdraw function with that reference
-        let vaultRef = acct.capabilities.storage.borrow<&ExampleToken.Vault>(
+        // Borrow a reference to the sender's Vault from storage
+        let vaultRef = acct.storage.borrow<&ExampleToken.Vault>(
             from: /storage/MainVault
-        ) ?? panic("Could not borrow a reference to the owner's vault")
+        ) ?? panic("Could not borrow a reference to the sender's Vault")
         
+        // Withdraw 10 tokens into the temporary Vault
         self.temporaryVault <- vaultRef.withdraw(amount: 10.0)
     }
 
@@ -22,13 +22,12 @@ transaction {
         // Get the recipient's public account object
         let recipient = getAccount(0x01)
 
-        // Get the recipient's Receiver reference to their Vault
-        // by borrowing the reference from the public capability
-        let receiverRef = recipient.capabilities.borrow<&ExampleToken.Vault{ExampleToken.Receiver}>(
+        // Borrow the recipient's Receiver capability for their Vault
+        let receiverRef = recipient.capabilities.get<&ExampleToken.Vault>(
             /public/MainReceiver
-        ) ?? panic("Could not borrow a reference to the receiver")
+        ).borrow() ?? panic("Could not borrow a Receiver reference from the recipient's Vault")
 
-        // Deposit your tokens to their Vault
+        // Deposit the tokens into the recipient's Vault
         receiverRef.deposit(from: <-self.temporaryVault)
 
         log("Transfer succeeded!")
