@@ -9,13 +9,24 @@ transaction {
     var temporaryVault: @ExampleToken.Vault
 
     prepare(acct: auth(Storage, Capabilities) &Account) {
-        // Borrow a reference to the sender's Vault with the Withdraw entitlement
+
+        // Step 1: Check if a Vault already exists, if not, create and save one
+        if acct.storage.borrow<&ExampleToken.Vault>(from: /storage/MainVault) == nil {
+            let newVault <- ExampleToken.createEmptyVault()
+            acct.storage.save<@ExampleToken.Vault>(<-newVault, to: /storage/MainVault)
+
+            log("New Vault created and saved to storage")
+        }
+
+        // Step 2: Borrow the Vault reference with the Withdraw entitlement
         let vaultRef = acct.storage.borrow<auth(ExampleToken.Withdraw) &ExampleToken.Vault>(
             from: /storage/MainVault
         ) ?? panic("Could not borrow a reference to the sender's Vault with Withdraw entitlement")
 
-        // Withdraw 10 tokens into the temporary Vault
+        // Step 3: Withdraw 10 tokens into the temporary Vault
         self.temporaryVault <- vaultRef.withdraw(amount: 10.0)
+
+        log("Withdrawn 10 tokens into temporary Vault")
     }
 
     execute {
