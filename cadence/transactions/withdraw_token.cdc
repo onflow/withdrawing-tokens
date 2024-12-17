@@ -10,7 +10,7 @@ transaction {
 
     prepare(acct: auth(Storage, Capabilities) &Account) {
         // Borrow a reference to the sender's Vault with the Withdraw entitlement
-        let vaultRef = acct.storage.borrow<auth(Withdraw) &ExampleToken.Vault>(
+        let vaultRef = acct.storage.borrow<auth(ExampleToken.Withdraw) &ExampleToken.Vault>(
             from: /storage/MainVault
         ) ?? panic("Could not borrow a reference to the sender's Vault with Withdraw entitlement")
 
