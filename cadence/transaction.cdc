@@ -1,1 +1,0 @@
-./cadence/transactions/withdraw_token.cdc
