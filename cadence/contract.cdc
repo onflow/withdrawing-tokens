@@ -1,1 +1,0 @@
-./cadence/contracts/Recipe.cdc

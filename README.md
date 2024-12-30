@@ -57,12 +57,6 @@ recipe-name/
 - `author`: contributor of the recipe
 - `playgroundLink`: a link to Flow Playground containing the deployed recipe code
 - `excerpt`: a brief description of the recipe contents
-- `smartContractCode`: path to location of Cadence smart contract code example
-- `smartContractExplanation`: path to location of smart contract code explanation
-- `transactionCode`: path to location of Cadence transaction code example
-- `transactionExplanation`: path to location of transaction code explanation
-- `testsPath`: path to location of Cadence test cases code example
-- `testsExplanationPath`: path to location of test cases code explanation
 - `filters`: the filters object is used to perform filtering on recipes in the cookbook
     - `difficulty`: the difficulty filter supports one of ['beginner', 'intermediate', 'advanced']
 
@@ -71,17 +65,7 @@ recipe-name/
 // Pass the repo name
 const recipe = "sample-recipe-name";
 
-//Generate paths of each code file to render
-const contractPath = `${recipe}/cadence/contract.cdc`;
-const transactionPath = `${recipe}/cadence/transaction.cdc`;
-const testsPath = `${recipe}/cadence/tests.cdc`;
-
-//Generate paths of each explanation file to render
-const smartContractExplanationPath = `${recipe}/explanations/contract.txt`;
-const transactionExplanationPath = `${recipe}/explanations/transaction.txt`;
-const testsExplanationPath = `${recipe}/explanations/tests.txt`;
-
-export const sampleRecipe= {
+export const sampleRecipe = {
   slug: recipe,
   title: "",
   featuredText: "",
@@ -89,10 +73,6 @@ export const sampleRecipe= {
   author: "",
   playgroundLink: "",
   excerpt: "",
-  smartContractCode: contractPath,
-  smartContractExplanation: smartContractExplanationPath,
-  transactionCode: transactionPath,
-  transactionExplanation: transactionExplanationPath,
 };
 ```
 ## Deploying Recipe Contracts and Running Transactions Locally (Flow Emulator)
